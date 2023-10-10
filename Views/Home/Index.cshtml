@@ -1,0 +1,72 @@
+﻿@using ToDoList.Models.Domain
+@model IEnumerable<Tasks>
+  @{
+      ViewData["Title"] = "Home Page";
+  }
+
+  <div class="text-center">
+    <form
+      class="row row-cols-lg-auto g-3 align-items-center mb-5" method="post"
+      asp-action="Create"
+    >
+      <div class="col-12">
+        <label class="visually-hidden">Task</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Task"
+          name="Task"
+          for="Task"
+        />
+      </div>
+
+      <div class="col-12">
+        <label class="visually-hidden" >Category</label>
+        <select
+          class="form-select" name="Category" for="Category">
+          <option selected>Choose...</option>
+          <option value="work">Work</option>
+          <option value="personal">Personal</option>
+        </select>
+      </div>
+
+      <div class="col-12">
+        <button type="submit" value="Create" class="btn btn-primary">
+          Add
+        </button>
+      </div>
+    </form>
+    
+    <table class="table">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">Sno</th>
+          <th scope="col">Task</th>
+          <th scope="col">Category</th>
+          <th scope="col">Status</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @{
+          int counter = 1;
+          @foreach (var task in Model.OrderBy(task => task.Priority))
+          {
+          <tr>
+            <th scope="row">@counter</th>
+            <td>@task.Task</td>
+            <td>@task.Category</td>
+            <td>@(task.Status ? "Done" : "Pending")</td>
+            <td>
+              <a href="@Url.Action("ToggleStatus", "Home", new { id = task.Id })" class="btn btn-info">Toggle Status</a>
+              <a href="@Url.Action("Delete", "Home", new { id = task.Id })" class="btn btn-danger">Delete</a>
+              <a href="@Url.Action("Edit", "Home", new { id = task.Id })" class="btn btn-primary">Edit</a>
+            </td>
+          </tr>
+          counter++;
+        }
+      }
+        </tbody>
+      </table>
+  </ul>
+  </div>
